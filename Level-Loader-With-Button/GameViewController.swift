@@ -1,8 +1,8 @@
 //
 //  GameViewController.swift
-//  Level-Loader-With-Button
+//  Load Levels
 //
-//  Created by mitchell hudson on 7/14/16.
+//  Created by mitchell hudson on 7/11/16.
 //  Copyright (c) 2016 mitchell hudson. All rights reserved.
 //
 
@@ -15,6 +15,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
 
         if let scene = GameScene(fileNamed:"GameScene") {
+        // if let scene = Level(fileNamed:"Level_1") {
             // Configure the view.
             let skView = self.view as! SKView
             skView.showsFPS = true
