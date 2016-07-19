@@ -22,9 +22,9 @@ import SpriteKit
 class GameScene: SKScene {
     
     var nextLevelButton: SKSpriteNode!
-	var levels = [SKNode]()
     var lastNode: SKNode?
-    var levelIndex = 0
+    var levelIndex = 1
+    let totalLevels = 3
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -35,43 +35,7 @@ class GameScene: SKScene {
         nextLevelButton.position.x = frame.width - 60
         nextLevelButton.position.y = 40
         nextLevelButton.name = "nextLevelButton"
-        
-        let scene_1 = Level(fileNamed: "Level_1")!
-        let scene_2 = Level(fileNamed: "Level_2")!
-        let scene_3 = Level(fileNamed: "Level_3")!
-        
-        let level_1 = scene_1.childNodeWithName("scene")!
-        level_1.removeFromParent()
-        let level_2 = scene_2.childNodeWithName("scene")!
-        level_2.removeFromParent()
-        let level_3 = scene_3.childNodeWithName("scene")!
-        level_3.removeFromParent()
-        
-        level_1.name = "level"
-        level_2.name = "level"
-        level_3.name = "level"
-        
-        levels = [level_1, level_2, level_3]
-        
-        /*
-        background_1 = childNodeWithName("background_1") as! SKSpriteNode
-        background_2 = childNodeWithName("background_2") as! SKSpriteNode
-        
-        
-		
-        background_1.addChild(level_1)
-		background_2.addChild(level_2)
-         */
     }
-	
-	
-	
-	func getRandomLevelForNode(node: SKNode) {
-		node.childNodeWithName("level")?.removeFromParent()
-		let levelNode = levels[Int(arc4random()) % levels.count].copy() as! SKNode
-		node.addChild(levelNode)
-	}
-	
 	
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -92,11 +56,17 @@ class GameScene: SKScene {
             
             // Add new level
             let node = SKNode()
-            node.addChild(levels[levelIndex])
-            levelIndex += 1
-            if levelIndex == levels.count {
-                levelIndex = 0
+            let newLevel = SKScene(fileNamed: "Level_\(levelIndex)")!
+            let newScene = newLevel.childNodeWithName("scene")!
+            newScene.removeFromParent()
+            node.addChild(newScene)
+            
+            if levelIndex == totalLevels {
+                levelIndex = 1
+            } else {
+                levelIndex += 1
             }
+            
             addChild(node)
             node.position.x = view!.frame.width
             let move = SKAction.moveToX(0, duration: 0.5)
