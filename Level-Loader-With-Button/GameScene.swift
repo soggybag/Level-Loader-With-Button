@@ -9,10 +9,24 @@
 
 /*
 
-	This examle loads "game levels" from individual sks files. 
-	It then copies these and adds them to nodes which scroll by. 
-	As each node is recycled we choose a random "game level" and
-	remove the previous "game level"
+ This examle loads "game levels" from individual sks files.
+ It then copies these and adds them to nodes which scroll into view.
+ This system might be good when you want to load new content into the
+ current scene without presenting a new scene file.
+ 
+ All of the content is "extracted" from scenes that are loaded. To make 
+ this possible each level scene, holds it's content in an SKNode named "scene". 
+ 
+ When a level is loaded the code below looks for the childnode named "scene", 
+ removes this node from the level scene, and adds it to the current scene.
+ 
+ In this example there are three levels and each is named Level_x where x is
+ the level number. This way we can easily keep track of the level number with 
+ levelIndex. 
+ 
+ Remember! your program will crah if try and add a node to a parent node when 
+ it is child of another node. You must always call node.removeFromParent() 
+ first!
 
 */
 
@@ -54,23 +68,33 @@ class GameScene: SKScene {
                 lastNode.runAction(SKAction.sequence([moveOff, removeNode]))
             }
             
-            // Add new level
+            // Add a new node to hold the new level content
             let node = SKNode()
+            // Load the level scene
             let newLevel = SKScene(fileNamed: "Level_\(levelIndex)")!
+            // Get the content node from that level
             let newScene = newLevel.childNodeWithName("scene")!
+            // Remove the content node from the it's current parent
             newScene.removeFromParent()
+            // Add the new content to the new scene node
             node.addChild(newScene)
             
+            // Advance the index to the next level.
             if levelIndex == totalLevels {
                 levelIndex = 1
             } else {
                 levelIndex += 1
             }
             
+            // add the new content node
             addChild(node)
+            // Position this node off the right edge
             node.position.x = view!.frame.width
+            // Use an action to move the content onto the screen from the right.
             let move = SKAction.moveToX(0, duration: 0.5)
             node.runAction(move)
+            // Mark this as the last node. This way we can identify this node to remove when 
+            // we need to load a new level. 
             lastNode = node
         }
     }
