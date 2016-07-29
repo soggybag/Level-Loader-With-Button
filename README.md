@@ -18,3 +18,5 @@ levelIndex.
 Remember! your program will crah if try and add a node to a parent node when 
 it is child of another node. You must always call node.removeFromParent() 
 first!
+
+![screenshot](screenshot.gif)
